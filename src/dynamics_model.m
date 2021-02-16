@@ -73,8 +73,8 @@ classdef dynamics_model
         end
         
         function dx = next_state(obj,x,u)
-            lambda=[1;1];
-            ddq = obj.get_ddq(x(1:5),x(6:10),u,lambda);
+           % lambda=[1;1];
+            ddq = obj.get_ddq(x(1:5),x(6:10),u(1:2),u(3:4));
             dx = [x(6:10);ddq];
             
         end

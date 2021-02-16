@@ -3,86 +3,90 @@ classdef utils
     %   Detailed explanation goes here
     
     properties
-        %null
+        Rw
     end
     
     methods (Static)
         
-        function plot_state(info)
+        function plot_state(XHistory,time)
             figure('Name','Plot state')
-            subplot(5,2,1)
-            plot(info.Topt,info.Xopt(:,1))
+            subplot(2,5,1)
+            plot(time,XHistory(:,1))
             xlabel('time')
             ylabel('x')
              grid on
-%             title('cart position')
-            subplot(5,2,3)
-            plot(info.Topt,info.Xopt(:,2))
+            subplot(2,5,2)
+            plot(time,XHistory(:,2))
             xlabel('time')
             ylabel('z')
              grid on
-%             title('cart velocity')
-            subplot(5,2,5)
-            plot(info.Topt,info.Xopt(:,3))
+            subplot(2,5,3)
+            plot(time,XHistory(:,3))
             xlabel('time')
             ylabel('phi')
              grid on
-           % title('pendulum angle')
-            subplot(5,2,7)
-            plot(info.Topt,info.Xopt(:,4))
+            subplot(2,5,4)
+            plot(time,XHistory(:,4))
             xlabel('time')
             ylabel('l')
              grid on
-%             title('pendulum velocity')
-            subplot(5,2,9)
-            plot(info.Topt,info.Xopt(:,5))
+            subplot(2,5,5)
+            plot(time,XHistory(:,5))
             xlabel('time')
             ylabel('theta')
              grid on
             
-            subplot(5,2,2)
-            plot(info.Topt,info.Xopt(:,6))
+            subplot(2,5,6)
+            plot(time,XHistory(:,6))
             xlabel('time')
             ylabel('x dot')
              grid on
-%             title('cart position')
-            subplot(5,2,4)
-            plot(info.Topt,info.Xopt(:,7))
+            subplot(2,5,7)
+            plot(time,XHistory(:,7))
             xlabel('time')
             ylabel('z dot')
              grid on
-%             title('cart velocity')
-            subplot(5,2,6)
-            plot(info.Topt,info.Xopt(:,8))
+            subplot(2,5,8)
+            plot(time,XHistory(:,8))
             xlabel('time')
             ylabel('phi dot')
              grid on
-           % title('pendulum angle')
-            subplot(5,2,8)
-            plot(info.Topt,info.Xopt(:,9))
+            subplot(2,5,9)
+            plot(time,XHistory(:,9))
             xlabel('time')
             ylabel('l dot')
              grid on
-%             title('pendulum velocity')
-            subplot(5,2,10)
-            plot(info.Topt,info.Xopt(:,10))
+            subplot(2,5,10)
+            plot(time,XHistory(:,10))
             xlabel('time')
             ylabel('theta dot')
             grid on
         end
         
-        function plot_control(info)
+        function plot_control(uHistory,time)
             figure('Name','Plot Controls')
-            subplot(1,2,1)
-            plot(info.Topt,info.MVopt(:,1))
+            subplot(2,2,1)
+            plot(time,uHistory(:,1))
             xlabel('time')
             ylabel('tau')
              grid on
-%             title('pendulum velocity')
-            subplot(1,2,2)
-            plot(info.Topt,info.MVopt(:,2))
+             
+            subplot(2,2,2)
+            plot(time,uHistory(:,2))
             xlabel('time')
             ylabel('f')
+            grid on
+            
+            subplot(2,2,3)
+            plot(time,uHistory(:,3))
+            xlabel('time')
+            ylabel('lambda x')
+            grid on
+            
+            subplot(2,2,4)
+            plot(time,uHistory(:,4))
+            xlabel('time')
+            ylabel('lambda z')
             grid on
             
         end
@@ -95,7 +99,77 @@ classdef utils
                 func=func+f;
             end
         end
+        
+        function createVideo(X, Z, L, THETA, fr)
+            j = 1;
+            v = VideoWriter('myVideo.avi');
+            v.FrameRate = fr;
+            open(v)
 
+            while j < length(X)
+                fig = figure(); % Explicitly create figure
+
+                utils.drawRobot(X(j), Z(j), L(j), THETA(j))
+                %axis([0 5 0 1000]);  % first plot, then change axis
+                width = max(X)+0.5-(min(X)-0.5)
+                xlim([min(X)-0.5, max(X)+0.5])
+                ylim([0.8-width/2, 0.8+width/2])
+                frame = getframe(gcf);
+                writeVideo(v,frame);
+                close(fig)  % close figure explicitly.
+                j = j + 1;
+                % pause(0.01)
+            end
+            close(v)
+       end
+        function drawRobot(x, z, l, theta)
+            circle([x, z], 0.17, 'color', 'black', 'LineWidth', 2);
+            hold on
+            theta_deg = theta*180/pi
+            utils.drawRectangleonImageAtAngle(0.5,  [x+sin(theta)*l/2; z+cos(theta)*l/2], 0.1, l, theta_deg)
+            circle([x+sin(theta)*l, z+cos(theta)*l], 0.17, 'color', 'black', 'LineWidth', 2);
+            hold off
+
+        end
+        function hdl = drawRectangleonImageAtAngle(img,center,width, height,angle)
+            hdl = 0%imshow(img); 
+            hold on;
+            theta = angle*(pi/180);
+            coords = [center(1)-(width/2) center(1)-(width/2) center(1)+(width/2)  center(1)+(width/2);...
+                      center(2)-(height/2) center(2)+(height/2) center(2)+(height/2)  center(2)-(height/2)]
+            R = [cos(theta) sin(theta);...
+                -sin(theta) cos(theta)];
+
+            rot_coords = R*(coords-repmat(center,[1 4]))+repmat(center,[1 4]);
+            rot_coords(:,5)=rot_coords(:,1);
+            line(rot_coords(1,:),rot_coords(2,:), 'color', 'red');
+
+        end
+        
+        
     end
+    
+
+    methods
+        
+        function obj =utils(Rw)
+            obj.Rw = Rw;
+        end
+        
+       function [eq]=eqConfunction(obj,X,U,e,data)
+           
+            for i=1:size(X,1)
+                eq(i)=X(i,6)-obj.Rw*X(i,8);
+            end    
+       end
+       
+       function [ineq]=ineqConfunction(obj,X,U,e,data)
+           for i=1:size(U,1)
+               ineq(i)=abs(U(i,3))-U(i,4);
+           end
+       end
+        
+    end
+    
 end
 

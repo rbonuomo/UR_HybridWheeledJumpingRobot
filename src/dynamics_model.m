@@ -62,7 +62,6 @@ classdef dynamics_model
         end
         
         function ddq = get_ddq(obj,q,dq,u,lambda)
-            
             M = obj.mass_matrix(q);
             C = obj.coriolis_matrix(q,dq);
             G = obj.gravity_vector(q);
@@ -73,8 +72,8 @@ classdef dynamics_model
             
         end
         
-        function dx = next_state(obj,x,u,lambda)
-            
+        function dx = next_state(obj,x,u)
+            lambda=[1;1];
             ddq = obj.get_ddq(x(1:5),x(6:10),u,lambda);
             dx = [x(6:10);ddq];
             

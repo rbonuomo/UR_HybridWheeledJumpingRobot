@@ -102,10 +102,23 @@ classdef utils
         
         function createVideo(X, Z, L, THETA, fr)
             j = 1;
-            v = VideoWriter('myVideo.mp4','MPEG-4');
+            video_name = 'myVideo';
+            if ismac
+                % Code to run on Mac platform
+                v = VideoWriter(video_name,'MPEG-4');
+            elseif isunix
+                % Code to run on Linux platform
+                v = VideoWriter(video_name);
+            elseif ispc
+                % Code to run on Windows platform
+                v = VideoWriter(video_name,'MPEG-4');
+            else
+                disp('Platform not supported')
+                v = VideoWriter(video_name);
+            end
             v.FrameRate = fr;
             open(v)
-            shape = [0, 0];
+            shape = [500, 500];
             while j < length(X)
                 fig = figure(); % Explicitly create figure
 
@@ -115,10 +128,7 @@ classdef utils
                 xlim([min(X)-0.5, max(X)+0.5])
                 ylim([0.8-width/2, 0.8+width/2])
                 frame = getframe(gcf);
-                if j==1
-                    shape(1) = size(frame.cdata, 1);
-                    shape(2) = size(frame.cdata, 2);
-                end
+                
                 if size(frame.cdata, 1)~=shape(1) || size(frame.cdata, 2)~=shape(2)
                     %new_frame = uint8(ones(shape(1), shape(2), 3)*255);
                     %new_frame(1:size(frame.cdata, 1), 1:size(frame.cdata, 2), :) = frame.cdata;
@@ -131,6 +141,14 @@ classdef utils
                 % pause(0.01)
             end
             close(v)
+            if ismac
+                % Code to run on Mac platform
+            elseif isunix
+                % Code to run on Linux platform
+                command = strcat('ffmpeg -i',{' '},video_name,'.avi',{' '},video_name,'.mp4')
+                command = command{1}
+                system(command);
+            end
        end
         function drawRobot(x, z, l, theta)
             circle([x, z], 0.17, 'color', 'black', 'LineWidth', 2);

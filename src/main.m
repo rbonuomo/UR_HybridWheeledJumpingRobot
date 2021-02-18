@@ -20,7 +20,7 @@ nlobj = nlmpc(nx,ny,nu);
 
 Duration=4;
 %p = 5;
-Ts = 0.1;
+Ts = 0.08;
 nlobj.Ts = Ts;
 nlobj.PredictionHorizon = 10;
 nlobj.ControlHorizon = 5;
@@ -31,11 +31,11 @@ nlobj.ManipulatedVariables(1).Max = 10;
 nlobj.ManipulatedVariables(2).Max = 200;
 nlobj.ManipulatedVariables(4).Min=0;
 
-
-nlobj.States(1).Max=1;
+nlobj.States(1).Max=10;
+nlobj.States(1).Min=-15;
 nlobj.States(2).Max=Rw;
 nlobj.States(2).Min=Rw;
-nlobj.States(4).Max=1;
+nlobj.States(4).Max=1+2*Rw;
 nlobj.States(4).Min=2*Rw;
 nlobj.States(5).Max=pi/2;
 nlobj.States(5).Min=-pi/2;
@@ -104,7 +104,6 @@ for ct = 1:(Duration/Ts)
      time = time+Ts;
 end
 
-delta_t=Ts;
 time_int=[0:Ts:Duration];
 
 utils.plot_state(xHistory,time_int)

@@ -145,6 +145,7 @@ classdef utils
                 % Code to run on Mac platform
             elseif isunix
                 % Code to run on Linux platform
+                % If Linux, convert AVI to MP4 using ffmpeg
                 command = strcat('ffmpeg -i',{' '},video_name,'.avi',{' '},video_name,'.mp4');
                 command = command{1};
                 system(command);

@@ -2,8 +2,8 @@ clear all
 close all
 clc
 
-mb = 2;
-mw = 4;
+mb = 4;
+mw = 2;
 Rw = 0.17;
 Iw = (mw*Rw^2);
 
@@ -61,7 +61,7 @@ u0 = [0;0;0;0];
 
 validateFcns(nlobj, x0, u0, []);
 
-W1 = [0 0 0 0 0 1 0 0 0 0];
+W1 = [0 0 0 0 1 1 0 0 0 0];
 W2 = [0 0 0 0 1 1 0 0 0 0];
 
 x_d1=[-1 Rw 0 0.5 -pi/2 3 0 0 0 0];
@@ -88,9 +88,9 @@ for ct = 1:(Duration/Ts)
     if current_phase ~= phase
         current_phase = phase;
         if phase == 2
-        nlobj.Weights.OutputVariables = W2;
-        x_d = x_d2;
-        disp('Phase 2')
+            nlobj.Weights.OutputVariables = W2;
+            x_d = x_d2;
+            disp('Phase 2')
         elseif phase == 3
             disp('Phase 3')
         end

@@ -102,7 +102,7 @@ classdef utils
         
         function createVideo(X, Z, L, THETA, fr)
             j = 1;
-            v = VideoWriter('myVideo.avi');
+            v = VideoWriter('myVideo.mp4','MPEG-4');
             v.FrameRate = fr;
             open(v)
             shape = [0, 0];
@@ -116,8 +116,8 @@ classdef utils
                 ylim([0.8-width/2, 0.8+width/2])
                 frame = getframe(gcf);
                 if j==1
-                    shape(1) = size(frame.cdata, 1)
-                    shape(2) = size(frame.cdata, 2)
+                    shape(1) = size(frame.cdata, 1);
+                    shape(2) = size(frame.cdata, 2);
                 end
                 if size(frame.cdata, 1)~=shape(1) || size(frame.cdata, 2)~=shape(2)
                     %new_frame = uint8(ones(shape(1), shape(2), 3)*255);
@@ -155,6 +155,17 @@ classdef utils
 
         end
         
+        function phase = temporal_phase(t,tf1,tf2)
+            
+            if t <= tf1
+                phase = 1;
+            elseif t > tf1 && t <= tf2
+                phase = 2;
+            elseif t > tf2
+                phase = 3;
+            end
+            
+        end
         
     end
     
@@ -166,16 +177,27 @@ classdef utils
         end
         
        function [eq]=eqConfunction(obj,X,U,e,data)
+
+           X6 = X(2:end,6);
+           X8 = X(2:end,8);
            
-            for i=1:size(X,1)
-                eq(i)=X(i,6)-obj.Rw*X(i,8);
-            end    
+           eq = X6-obj.Rw*X8;
+           
+%             for i=1:size(X,1)
+%                 eq(i)=X(i,6)-obj.Rw*X(i,8);
+%             end    
        end
        
        function [ineq]=ineqConfunction(obj,X,U,e,data)
-           for i=1:size(U,1)
-               ineq(i)=abs(U(i,3))-U(i,4);
-           end
+           
+           U3 = U(2:end,3);
+           U4 = U(2:end,4);
+           
+           ineq = U3 - U4;
+           
+%            for i=1:size(U,1)
+%                ineq(i)=abs(U(i,3))-U(i,4);
+%            end
        end
         
     end

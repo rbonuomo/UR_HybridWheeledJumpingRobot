@@ -20,7 +20,7 @@ nlobj = nlmpc(nx,ny,nu);
 
 Duration=4;
 %p = 5;
-Ts = 0.05;
+Ts = 0.1;
 nlobj.Ts = Ts;
 nlobj.PredictionHorizon = 10;
 nlobj.ControlHorizon = 5;
@@ -47,37 +47,61 @@ u = [tau;f;lambda_x;lambda_z];
 
 nlobj.Optimization.CustomCostFcn = @(X,U,e,data) utils.cost_func(X,U,e,data);
 
-Optimization.CustomEqConFcn = @(X,U,data) utils_obj.eqConfunction(X,U,data);
-Optimization.CustomIneqConFcn = @(X,U,e,data) utils_obj.ineqConfunction(X,U,e,data);
+nlobj.Optimization.CustomEqConFcn = @(X,U,data) utils_obj.eqConfunction(X,U,data);
+nlobj.Optimization.CustomIneqConFcn = @(X,U,e,data) utils_obj.ineqConfunction(X,U,e,data);
 
 nlobj.Model.StateFcn = @(x,u) dyn.next_state(x,u);
 nlobj.Model.IsContinuousTime = true;
 
-
 %nlobj.Model.OutputFcn = @(x,u) [x(5)];
 
-v0=3;
-x0 = [-1;Rw;0;0.5;-pi/2; v0;0;v0/Rw;0;0];
+v0=0;
+x0 = [-5;Rw;0;0.5;-pi/2; v0;0;v0/Rw;0;0];
 u0 = [0;0;0;0];
+
 validateFcns(nlobj, x0, u0, []);
 
-nlobj.Weights.OutputVariables = [0 0 0 0 1 0 0 0 0 0];
-x_d=[-1 Rw 0 0.5 0 0 0 0 0 0];
+W1 = [0 0 0 0 0 1 0 0 0 0];
+W2 = [0 0 0 0 1 1 0 0 0 0];
 
-nloptions = nlmpcmoveopt
+x_d1=[-1 Rw 0 0.5 -pi/2 3 0 0 0 0];
+x_d2=[-1 Rw 0 0.5 0 0 0 0 0 0];
+
+nloptions = nlmpcmoveopt;
+
+time = 0;
+tf1 = 2;
+tf2 = 4;
+current_phase = 1;
 
 xk=x0;
 uk=u0;
 xHistory = x0';
-uHistory = u0'; 
+uHistory = u0';
+
+x_d = x_d1;
+nlobj.Weights.OutputVariables = W1;
+
 for ct = 1:(Duration/Ts)
 
+    phase = utils.temporal_phase(time,tf1,tf2);
+    if current_phase ~= phase
+        current_phase = phase;
+        if phase == 2
+        nlobj.Weights.OutputVariables = W2;
+        x_d = x_d2;
+        disp('Phase 2')
+        elseif phase == 3
+            disp('Phase 3')
+        end
+    end
     disp(['iteration.. ',num2str(ct),'/', num2str(Duration/Ts)])
      [uk,nloptions, info]= nlmpcmove(nlobj,xk,uk,x_d,[],nloptions);
      xk=info.Xopt(2,:);
      uk=info.MVopt(2,:);
      xHistory = [xHistory; xk];
      uHistory = [uHistory; uk];
+     time = time+Ts;
 end
 
 delta_t=Ts;

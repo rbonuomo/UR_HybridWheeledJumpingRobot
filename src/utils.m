@@ -95,7 +95,7 @@ classdef utils
             W=1;
             func=0;
             for i=1:size(U,1)
-                f=W*U(i,:)*U(i,:)';
+                f=W*U(i,1:2)*U(i,1:2)';
                 func=func+f;
             end
         end
@@ -105,16 +105,26 @@ classdef utils
             v = VideoWriter('myVideo.avi');
             v.FrameRate = fr;
             open(v)
-
+            shape = [0, 0];
             while j < length(X)
                 fig = figure(); % Explicitly create figure
 
                 utils.drawRobot(X(j), Z(j), L(j), THETA(j))
                 %axis([0 5 0 1000]);  % first plot, then change axis
-                width = max(X)+0.5-(min(X)-0.5)
+                width = max(X)+0.5-(min(X)-0.5);
                 xlim([min(X)-0.5, max(X)+0.5])
                 ylim([0.8-width/2, 0.8+width/2])
                 frame = getframe(gcf);
+                if j==1
+                    shape(1) = size(frame.cdata, 1)
+                    shape(2) = size(frame.cdata, 2)
+                end
+                if size(frame.cdata, 1)~=shape(1) || size(frame.cdata, 2)~=shape(2)
+                    %new_frame = uint8(ones(shape(1), shape(2), 3)*255);
+                    %new_frame(1:size(frame.cdata, 1), 1:size(frame.cdata, 2), :) = frame.cdata;
+                    new_frame = imresize(frame.cdata,[shape(1) shape(2)]);
+                    frame.cdata = new_frame;
+                end
                 writeVideo(v,frame);
                 close(fig)  % close figure explicitly.
                 j = j + 1;
@@ -125,18 +135,17 @@ classdef utils
         function drawRobot(x, z, l, theta)
             circle([x, z], 0.17, 'color', 'black', 'LineWidth', 2);
             hold on
-            theta_deg = theta*180/pi
-            utils.drawRectangleonImageAtAngle(0.5,  [x+sin(theta)*l/2; z+cos(theta)*l/2], 0.1, l, theta_deg)
+            theta_deg = theta*180/pi;
+            utils.drawRectangleonImageAtAngle([x+sin(theta)*l/2; z+cos(theta)*l/2], 0.1, l, theta_deg);
             circle([x+sin(theta)*l, z+cos(theta)*l], 0.17, 'color', 'black', 'LineWidth', 2);
             hold off
 
         end
-        function hdl = drawRectangleonImageAtAngle(img,center,width, height,angle)
-            hdl = 0%imshow(img); 
+        function drawRectangleonImageAtAngle(center,width, height,angle)
             hold on;
             theta = angle*(pi/180);
             coords = [center(1)-(width/2) center(1)-(width/2) center(1)+(width/2)  center(1)+(width/2);...
-                      center(2)-(height/2) center(2)+(height/2) center(2)+(height/2)  center(2)-(height/2)]
+                      center(2)-(height/2) center(2)+(height/2) center(2)+(height/2)  center(2)-(height/2)];
             R = [cos(theta) sin(theta);...
                 -sin(theta) cos(theta)];
 

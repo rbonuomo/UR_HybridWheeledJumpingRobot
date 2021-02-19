@@ -91,7 +91,7 @@ classdef utils
             
         end
         
-        function func=cost_func(X,U,e,data)
+        function func=cost_func(X,U,e,data,p)
             W=1;
             func=0;
             for i=1:size(U,1)
@@ -100,9 +100,9 @@ classdef utils
             end
         end
         
-        function createVideo(X, Z, L, THETA, fr)
+        function createVideo(X, Z, L, THETA, fr, path)
             j = 1;
-            video_name = 'myVideo';
+            video_name = strcat(path,'/myVideo');
             if ismac
                 % Code to run on Mac platform
                 v = VideoWriter(video_name,'MPEG-4');
@@ -120,7 +120,7 @@ classdef utils
             open(v)
             shape = [500, 500];
             while j < length(X)
-                fig = figure(); % Explicitly create figure
+                %fig = figure(); % Explicitly create figure
 
                 utils.drawRobot(X(j), Z(j), L(j), THETA(j))
                 %axis([0 5 0 1000]);  % first plot, then change axis
@@ -136,7 +136,7 @@ classdef utils
                     frame.cdata = new_frame;
                 end
                 writeVideo(v,frame);
-                close(fig)  % close figure explicitly.
+                %close(fig)  % close figure explicitly.
                 j = j + 1;
                 % pause(0.01)
             end

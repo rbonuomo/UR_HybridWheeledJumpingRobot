@@ -212,7 +212,7 @@ classdef utils
            U3 = U(2:end,3);
            U4 = U(2:end,4);
            
-           ineq = U3 - U4;
+           ineq = abs(U3) - U4;
            
 %            for i=1:size(U,1)
 %                ineq(i)=abs(U(i,3))-U(i,4);

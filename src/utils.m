@@ -12,54 +12,54 @@ classdef utils
             figure('Name','Plot state')
             subplot(2,5,1)
             plot(time,XHistory(:,1))
-            xlabel('time')
-            ylabel('x')
+            xlabel('$t$','interpreter','latex', 'FontSize', 20)
+            ylabel('$x$','interpreter','latex', 'FontSize', 20)
              grid on
             subplot(2,5,2)
             plot(time,XHistory(:,2))
-            xlabel('time')
-            ylabel('z')
+            xlabel('$t$','interpreter','latex', 'FontSize', 20)
+            ylabel('$z$','interpreter','latex', 'FontSize', 20)
              grid on
             subplot(2,5,3)
             plot(time,XHistory(:,3))
-            xlabel('time')
-            ylabel('phi')
+            xlabel('$t$','interpreter','latex', 'FontSize', 20)
+            ylabel('$\phi$','interpreter','latex', 'FontSize', 20)
              grid on
             subplot(2,5,4)
             plot(time,XHistory(:,4))
-            xlabel('time')
-            ylabel('l')
+            xlabel('$t$','interpreter','latex', 'FontSize', 20)
+            ylabel('$l$','interpreter','latex', 'FontSize', 20)
              grid on
             subplot(2,5,5)
             plot(time,XHistory(:,5))
-            xlabel('time')
-            ylabel('theta')
+            xlabel('$t$','interpreter','latex', 'FontSize', 20)
+            ylabel('$\theta$','interpreter','latex', 'FontSize', 20)
              grid on
             
             subplot(2,5,6)
             plot(time,XHistory(:,6))
-            xlabel('time')
-            ylabel('x dot')
+            xlabel('$t$','interpreter','latex', 'FontSize', 20)
+            ylabel('$\dot{x}$','interpreter','latex', 'FontSize', 20)
              grid on
             subplot(2,5,7)
             plot(time,XHistory(:,7))
-            xlabel('time')
-            ylabel('z dot')
+            xlabel('$t$','interpreter','latex', 'FontSize', 20)
+            ylabel('$\dot{z}$','interpreter','latex', 'FontSize', 20)
              grid on
             subplot(2,5,8)
             plot(time,XHistory(:,8))
-            xlabel('time')
-            ylabel('phi dot')
+            xlabel('$t$','interpreter','latex', 'FontSize', 20)
+            ylabel('$\dot{\phi}$','interpreter','latex', 'FontSize', 20)
              grid on
             subplot(2,5,9)
             plot(time,XHistory(:,9))
-            xlabel('time')
-            ylabel('l dot')
+            xlabel('$t$','interpreter','latex', 'FontSize', 20)
+            ylabel('$\dot{l}$','interpreter','latex', 'FontSize', 20)
              grid on
             subplot(2,5,10)
             plot(time,XHistory(:,10))
-            xlabel('time')
-            ylabel('theta dot')
+            xlabel('$t$','interpreter','latex', 'FontSize', 20)
+            ylabel('$\dot{\theta}$','interpreter','latex', 'FontSize', 20)
             grid on
         end
         
@@ -67,26 +67,26 @@ classdef utils
             figure('Name','Plot Controls')
             subplot(2,2,1)
             plot(time,uHistory(:,1))
-            xlabel('time')
-            ylabel('tau')
+            xlabel('$t$','interpreter','latex', 'FontSize', 20)
+            ylabel('$\tau$','interpreter','latex', 'FontSize', 20)
              grid on
              
             subplot(2,2,2)
             plot(time,uHistory(:,2))
-            xlabel('time')
-            ylabel('f')
+            xlabel('$t$','interpreter','latex', 'FontSize', 20)
+            ylabel('$f$','interpreter','latex', 'FontSize', 20)
             grid on
             
             subplot(2,2,3)
             plot(time,uHistory(:,3))
-            xlabel('time')
-            ylabel('lambda x')
+            xlabel('$t$','interpreter','latex', 'FontSize', 20)
+            ylabel('$\lambda_x$','interpreter','latex', 'FontSize', 20)
             grid on
             
             subplot(2,2,4)
             plot(time,uHistory(:,4))
-            xlabel('time')
-            ylabel('lambda z')
+            xlabel('$t$','interpreter','latex', 'FontSize', 20)
+            ylabel('$\lambda_z$','interpreter','latex', 'FontSize', 20)
             grid on
             
         end

@@ -20,10 +20,10 @@ nlobj = nlmpc(nx,ny,nu);
 
 Duration=4;
 %p = 5;
-Ts = 0.08;
+Ts = 0.1;
 nlobj.Ts = Ts;
 nlobj.PredictionHorizon = 10;
-nlobj.ControlHorizon = 5;
+nlobj.ControlHorizon = 10;
 
 nlobj.ManipulatedVariables(1).Min = -10;
 nlobj.ManipulatedVariables(2).Min = -200;
@@ -40,32 +40,28 @@ nlobj.States(4).Min=2*Rw;
 nlobj.States(5).Max=pi/2;
 nlobj.States(5).Min=-pi/2;
 
-% syms xi z phi l theta dxi dz dphi dl dtheta tau f lambda_x lambda_z real
-% 
-% x = [xi;z;phi;l;theta;dxi;dz;dphi;dl;dtheta];
-% u = [tau;f;lambda_x;lambda_z];
-
-%nlobj.Optimization.CustomCostFcn = @(X,U,e,data) utils.cost_func(X,U,e,data);
+nlobj.Optimization.CustomCostFcn = @(X,U,e,data) utils.cost_func(X,U,e,data);
 
 nlobj.Optimization.CustomEqConFcn = @(X,U,data) utils_obj.eqConfunction(X,U,data);
 nlobj.Optimization.CustomIneqConFcn = @(X,U,e,data) utils_obj.ineqConfunction(X,U,e,data);
 
 nlobj.Model.StateFcn = @(X,U) dyn.next_state(X,U);
 nlobj.Model.IsContinuousTime = true;
+%% Setting Weights
 
-W1 = [0 0 0 0 1 1 0 0 0 0];
-W2 = [0 0 0 0 1 1 0 0 0 0];
+% We are only interested in theta and dx
+% (because we want the car to drive horizontally)
+W = [0 0 0 0 1 1 0 0 0 0];
 
-nlobj.Weights.OutputVariables = W1;
+% The last two inputs are the ground reaction forces
+% We don't want to weight them
+nlobj.Weights.OutputVariables = W;
 nlobj.Weights.ManipulatedVariables = [1 1 0 0];
 
+%%
 %nlobj.Model.OutputFcn = @(x,u) [x(5)];
 
-x_d1=[-1 Rw 0 0.5 -pi/2 3 0 0 0 0];
-% x_d2=[-1 Rw 0 0.5 0 0 0 0 0 0];
-x_d2=[-1 Rw 0 0.5 -pi/2 3 0 0 0 0];
-
-x_d = x_d1;
+x_d=[-1 Rw 0 0.5 -pi/2 3 0 0 0 0];
 
 v0=0;
 x0 = [-5;Rw;0;0.5;-pi/2; v0;0;v0/Rw;0;0];
@@ -80,6 +76,7 @@ tf1 = 2;
 tf2 = 4;
 current_phase = 1;
 
+%% Closed loop
 xk=x0;
 uk=u0;
 xHistory = x0';
@@ -109,6 +106,8 @@ for ct = 1:(Duration/Ts)
      time = time+Ts;
      toc
 end
+
+%% Plots
 
 time_int=[0:Ts:Duration];
 

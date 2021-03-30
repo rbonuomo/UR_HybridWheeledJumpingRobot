@@ -18,12 +18,12 @@ nu = 4;
 
 nlobj = nlmpc(nx,ny,nu);
 
-Duration=4;
+Duration=5;
 %p = 5;
-Ts = 0.1;
+Ts = 0.25;
 nlobj.Ts = Ts;
-nlobj.PredictionHorizon = 10;
-nlobj.ControlHorizon = 10;
+nlobj.PredictionHorizon = 20;
+nlobj.ControlHorizon = 20;
 
 nlobj.ManipulatedVariables(1).Min = -10;
 nlobj.ManipulatedVariables(2).Min = -200;
@@ -31,8 +31,6 @@ nlobj.ManipulatedVariables(1).Max = 10;
 nlobj.ManipulatedVariables(2).Max = 200;
 nlobj.ManipulatedVariables(4).Min=0;
 
-nlobj.States(1).Max=10;
-nlobj.States(1).Min=-15;
 nlobj.States(2).Max=Rw;
 nlobj.States(2).Min=Rw;
 nlobj.States(4).Max=1+2*Rw;
@@ -51,7 +49,7 @@ nlobj.Model.IsContinuousTime = true;
 
 % We are only interested in theta and dx
 % (because we want the car to drive horizontally)
-W = [0 0 0 0 1 1 0 0 0 0];
+W = [1000 100 0 0 1000 0 0 0 0 0];
 
 % The last two inputs are the ground reaction forces
 % We don't want to weight them
@@ -61,10 +59,10 @@ nlobj.Weights.ManipulatedVariables = [1 1 0 0];
 %%
 %nlobj.Model.OutputFcn = @(x,u) [x(5)];
 
-x_d=[-1 Rw 0 0.5 -pi/2 3 0 0 0 0];
+x_d=[2 Rw 0 0.5 0 0 0 0 0 0];
 
 v0=0;
-x0 = [-5;Rw;0;0.5;-pi/2; v0;0;v0/Rw;0;0];
+x0 = [0.;Rw;0;0.5;-pi/16; 0;0;0;0;0];
 u0 = [0;0;0;0];
 
 validateFcns(nlobj, x0, u0, []);
@@ -100,9 +98,10 @@ for ct = 1:(Duration/Ts)
     disp(['iteration.. ',num2str(ct),'/', num2str(Duration/Ts)])
      [uk,nloptions, info]= nlmpcmove(nlobj,xk,uk,x_d,[],nloptions);
      xk=info.Xopt(2,:);
-     uk=info.MVopt(2,:);
+     %uk=info.MVopt(2,:);
+     uk
      xHistory = [xHistory; xk];
-     uHistory = [uHistory; uk];
+     uHistory = [uHistory; uk'];
      time = time+Ts;
      toc
 end

@@ -199,8 +199,19 @@ classdef utils
 
            X6 = X(2:end,6);
            X8 = X(2:end,8);
+           xd = [2 obj.Rw 0 0.5 0 0 0 0 0 0];
            
-           eq = X6-obj.Rw*X8;
+           eq = [X6-obj.Rw*X8;
+               X(end,1)-xd(1);
+               X(end,2)-xd(2);
+               X(end,3)-xd(3);
+               X(end,4)-xd(4);
+               X(end,5)-xd(5);
+               X(end,6)-xd(6);
+               X(end,7)-xd(7);
+               X(end,8)-xd(8);
+               X(end,9)-xd(9);
+               X(end,10)-xd(10)];
            
 %             for i=1:size(X,1)
 %                 eq(i)=X(i,6)-obj.Rw*X(i,8);

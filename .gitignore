@@ -1,2 +1,8 @@
 src/matlab/build/*
 src/matlab/results/*
+
+src/python/env/*
+src/python/c_generated_code/*
+src/python/results/*
+src/python/__pycache__/*
+src/python/acados_ocp.json

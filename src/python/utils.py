@@ -113,19 +113,22 @@ def drawRobot(state, i, folder):
     y_values = [state[1], state[1]+math.sin(-state[2]+math.pi/2)*0.17]
     plt.plot(x_values, y_values, color='k')
 
-    x_values = [-10, 1.5]
+    gap_minus = 1.5
+    gap_plus = 2.
+
+    x_values = [-10, gap_minus]
     y_values = [0, 0]
     plt.plot(x_values, y_values, color='k', linewidth=0.5)
 
-    x_values = [2, 10]
+    x_values = [gap_plus, 10]
     y_values = [0, 0]
     plt.plot(x_values, y_values, color='k', linewidth=0.5)
 
-    x_values = [1.5, 1.5]
+    x_values = [gap_minus, gap_minus]
     y_values = [0, -10]
     plt.plot(x_values, y_values, color='k', linewidth=0.5)
 
-    x_values = [2, 2]
+    x_values = [gap_plus, gap_plus]
     y_values = [0, -10]
     plt.plot(x_values, y_values, color='k', linewidth=0.5)
 
@@ -136,16 +139,74 @@ def drawRobot(state, i, folder):
     #plt.show()
     plt.close()
 
-def renderVideo(simX, t, folder):
+def drawRobotWithHorizon(state, horizon, i, folder):
+    plt.figure(figsize=(10, 10))
+    plt.xlim((-1, 3))
+    plt.ylim((-1, 3))
+
+    #print(state)
+    #print(horizon)
     
+    for j in range(horizon.shape[0]-1, -1, -1): 
+        state = horizon[j]
+        if j==0:
+            alpha=1
+        else:
+            alpha = 0.05
+
+        rect = matplotlib.patches.Rectangle((state[0]+math.cos(-state[4])*0.1, state[1]+math.sin(-state[4])*0.1), state[3], 0.2, angle=90-state[4]*180/math.pi, alpha=alpha)
+        plt.gca().add_patch(rect)
+
+        circle = plt.Circle((state[0], state[1]), 0.17, color='r', alpha=alpha)
+        plt.gca().add_patch(circle)
+
+        x_values = [state[0], state[0]+math.cos(-state[2]+math.pi/2)*0.17]
+        y_values = [state[1], state[1]+math.sin(-state[2]+math.pi/2)*0.17]
+        plt.plot(x_values, y_values, color='k', alpha=alpha)
+
+    gap_minus = 1.5
+    gap_plus = 2.
+
+    x_values = [-10, gap_minus]
+    y_values = [0, 0]
+    plt.plot(x_values, y_values, color='k', linewidth=0.5)
+
+    x_values = [gap_plus, 10]
+    y_values = [0, 0]
+    plt.plot(x_values, y_values, color='k', linewidth=0.5)
+
+    x_values = [gap_minus, gap_minus]
+    y_values = [0, -10]
+    plt.plot(x_values, y_values, color='k', linewidth=0.5)
+
+    x_values = [gap_plus, gap_plus]
+    y_values = [0, -10]
+    plt.plot(x_values, y_values, color='k', linewidth=0.5)
+
+    plt.savefig('results/' + folder + "/%04d" % i +"_hor.png")
+    if i==0:
+        plt.savefig('results/' + folder + "/%04d" % i +"_hor.eps")
+
+    #plt.show()
+    plt.close()
+
+def renderVideo(simX, simX_horizon, t, folder):
+    
+
     for i in tqdm(range(simX.shape[0])):
         state = simX[i, :]
+        horizon = simX_horizon[i]
         drawRobot(state, i, folder)
+        drawRobotWithHorizon(state, horizon, i, folder)
 
+    
     period = np.mean(np.diff(t))
     fr = int(np.around(1/period, decimals=0))
     os.chdir('results/' + folder)
     os.system(f"ffmpeg -framerate {fr}"+" -i %04d.png -r 30 -pix_fmt yuv420p video.mp4")
     for i in tqdm(range(simX.shape[0]), desc="Removing temp files"):
         os.system('rm %04d.png' %i)
+    os.system(f"ffmpeg -framerate {fr}"+" -i %04d_hor.png -r 30 -pix_fmt yuv420p video_with_horizon.mp4")
+    for i in tqdm(range(simX.shape[0]), desc="Removing temp files"):
+        os.system('rm %04d_hor.png' %i)
     os.chdir('../..')

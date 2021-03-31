@@ -152,7 +152,7 @@ def drawRobotWithHorizon(state, horizon, i, folder):
         if j==0:
             alpha=1
         else:
-            alpha = 0.05
+            alpha = 0.02
 
         rect = matplotlib.patches.Rectangle((state[0]+math.cos(-state[4])*0.1, state[1]+math.sin(-state[4])*0.1), state[3], 0.2, angle=90-state[4]*180/math.pi, alpha=alpha)
         plt.gca().add_patch(rect)

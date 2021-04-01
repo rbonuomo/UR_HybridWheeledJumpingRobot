@@ -9,7 +9,7 @@ class CarModel:
         self.mw = mw
         self.Iw = Iw
         self.Rw = Rw
-        self.model = export_car_ode_model(mb, mw, Iw, Rw)
+        self.model = export_car_ode_model_with_discrete_rk4(mb, mw, Iw, Rw, dT)
 
 
 def export_car_ode_model(mb, mw, Iw, Rw):

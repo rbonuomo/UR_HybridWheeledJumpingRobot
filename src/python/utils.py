@@ -184,9 +184,7 @@ def drawRobotWithHorizon(state, horizon, i, folder):
     plt.plot(x_values, y_values, color='k', linewidth=0.5)
 
     plt.savefig('results/' + folder + "/%04d" % i +"_hor.png")
-    if i==0:
-        plt.savefig('results/' + folder + "/%04d" % i +"_hor.eps")
-
+    
     #plt.show()
     plt.close()
 

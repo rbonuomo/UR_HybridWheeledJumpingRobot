@@ -10,21 +10,22 @@ import os
 from utils import *
 from tqdm import tqdm
 
-Tf = 2.2  # prediction horizon
-N = int(Tf*50)  # number of discretization steps
+Tf = 2.0  # prediction horizon
+N = round(Tf*20)  # number of discretization steps
 T = 10.0  # maximum simulation time[s]
 
 t1=5  # start run-up time
 t2 = 7 # take off
 t3=7.4 # land
-t4=T
+t4=8
+t5=T
 
 mb = 4
 mw = 2
 Rw = 0.17
 Iw = (mw*(Rw**2))
 
-car_model = CarModel(mb, mw, Rw, Iw, Tf/N)
+car_model = CarModel(mb, mw, Iw, Rw, Tf/N)
 model = car_model.model
 
 ocp = AcadosOcp()
@@ -65,10 +66,11 @@ Vx_e[:nx, :nx] = np.eye(nx)
 ocp.cost.Vx_e = Vx_e
 
 # set intial references
-target_phase1 = np.array([0.5, Rw, 0, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) # target standing position
+target_phase1 = np.array([0.0, Rw, 0, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) # target standing position
 target_phase2 = np.array([1.4, Rw, 0, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) # target take-off position
 target_phase3 = np.array([2.1, Rw, 0, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) # target touch-down
-target_phase4 = np.array([2.5, Rw, 0, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) # finalize
+target_phase4 = np.array([2.3, Rw, 0, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) # finalize
+target_phase5 = np.array([2.5, Rw, 0, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) # finalize
 
 yref = target_phase1
 yref_e = target_phase1[:10]
@@ -110,7 +112,7 @@ ocp.constraints.uh = upper_ground
 
 
 # set intial condition
-v0 = 0.0
+v0 = 0
 x0 = np.array([0.5, Rw, 0, 0.5, -40*np.pi/180, v0, 0, v0/Rw, 0, 0])
 ocp.constraints.x0 = x0
 
@@ -120,7 +122,7 @@ ocp.solver_options.qp_solver = 'FULL_CONDENSING_QPOASES'
 #ocp.solver_options.qp_solver = "PARTIAL_CONDENSING_HPIPM"
 ocp.solver_options.nlp_solver_type = "SQP_RTI"
 ocp.solver_options.hessian_approx = "GAUSS_NEWTON"
-ocp.solver_options.integrator_type = "ERK"
+ocp.solver_options.integrator_type = "DISCRETE"
 ocp.solver_options.sim_method_num_stages = 4
 ocp.solver_options.sim_method_num_steps = 1
 ocp.solver_options.qp_solver_iter_max = 1000
@@ -149,7 +151,7 @@ with open('results/'+folder+'/data.txt', 'w') as f:
     print(f'qp_solver_iter_max = {ocp.solver_options.qp_solver_iter_max}', file=f)
     print(f'nlp_solver_max_iter = {ocp.solver_options.nlp_solver_max_iter}', file=f)
 
-Nsim = int(T * N / Tf)
+Nsim = round(T * N / Tf)
 # initialize data structs
 simX = np.ndarray((Nsim, nx))
 simU = np.ndarray((Nsim, nu))
@@ -175,8 +177,10 @@ for i in tqdm(range(Nsim)):
             acados_solver.set(j, 'y_ref', target_phase2)
         elif step_time<t3:
             acados_solver.set(j, 'y_ref', target_phase3)
-        else:
+        elif step_time<t4:
             acados_solver.set(j, 'y_ref', target_phase4)
+        else:
+            acados_solver.set(j, 'y_ref', target_phase5)
 
         if step_time>t2 and step_time<t3:
             acados_solver.constraints_set(j, 'lh', lower_flying)
@@ -208,6 +212,7 @@ for i in tqdm(range(Nsim)):
     t = time.time()
 
     status = acados_solver.solve()
+    #print(acados_solver.get_residuals())
     #acados_solver.print_statistics()
     if status != 0:
         print("acados returned status {} in closed loop iteration {}.".format(status, i))
@@ -267,4 +272,4 @@ with open('results/' + folder + "/t.npy", 'wb') as f:
     np.save(f, t)
 
 # THIS IS A BIT SLOW
-renderVideo(simX, t, folder)
+renderVideo(simX, simX_horizon, t, folder)

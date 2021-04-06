@@ -188,23 +188,49 @@ def drawRobotWithHorizon(state, horizon, i, folder):
     #plt.show()
     plt.close()
 
-def renderVideo(simX, simX_horizon, t, folder):
+def renderVideo(simX, simX_horizon, phase0, t, folder, name):
     
-
-    for i in tqdm(range(simX.shape[0])):
-        state = simX[i, :]
-        horizon = simX_horizon[i]
-        drawRobot(state, i, folder)
-        drawRobotWithHorizon(state, horizon, i, folder)
-
-    
+    if phase0:
+        for i in tqdm(range(0, simX.shape[0])):
+            state = simX[i, :]
+            drawRobot(state, i, folder)
+    else:
+        for i in tqdm(range(simX.shape[0])):
+            state = simX[i, :]
+            drawRobot(state, i, folder)
+            horizon = simX_horizon[i]
+            drawRobotWithHorizon(state, horizon, i, folder)
     period = np.mean(np.diff(t))
     fr = int(np.around(1/period, decimals=0))
     os.chdir('results/' + folder)
-    os.system(f"ffmpeg -framerate {fr}"+" -i %04d.png -r 30 -pix_fmt yuv420p video.mp4")
+    os.system(f"ffmpeg -framerate {fr}"+" -i %04d.png -r 30 -pix_fmt yuv420p "+f"{name}.mp4")
     for i in tqdm(range(simX.shape[0]), desc="Removing temp files"):
         os.system('rm %04d.png' %i)
-    os.system(f"ffmpeg -framerate {fr}"+" -i %04d_hor.png -r 30 -pix_fmt yuv420p video_with_horizon.mp4")
-    for i in tqdm(range(simX.shape[0]), desc="Removing temp files"):
-        os.system('rm %04d_hor.png' %i)
+    if not phase0:
+        os.system(f"ffmpeg -framerate {fr}"+" -i %04d_hor.png -r 30 -pix_fmt yuv420p "+f"{name}_with_horizon.mp4")
+        for i in tqdm(range(simX.shape[0]), desc="Removing temp files"):
+            os.system('rm %04d_hor.png' %i)
     os.chdir('../..')
+
+def get_extended_state(simX, Rw):
+    print(simX.shape)
+    ext_state = np.zeros((simX.shape[0], 10))
+    ext_state[:, 0] = simX[:, 0]*Rw
+    ext_state[:, 1] = Rw
+    ext_state[:, 2] = simX[:, 0]
+    ext_state[:, 3] = 0.5
+    ext_state[:, 4] = simX[:, 1]-np.pi/2
+    ext_state[:, 5] = simX[:, 2]*Rw
+    ext_state[:, 6] = 0
+    ext_state[:, 7] = simX[:, 2]
+    ext_state[:, 8] = 0
+    ext_state[:, 9] = simX[:, 3]
+    return ext_state
+
+def get_extended_controls(simU):
+    ext_U = np.zeros((simU.shape[0], 4))
+    ext_U[:, 0] = simU[:, 0]
+    ext_U[:, 1] = 0
+    ext_U[:, 2] = 0
+    ext_U[:, 3] = 0
+    return ext_U

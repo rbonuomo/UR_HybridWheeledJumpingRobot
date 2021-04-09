@@ -239,7 +239,7 @@ plt.savefig('results/' + folder + "/control_plots_phase0.png", dpi=300)
 
 
 # THIS IS A BIT SLOW
-renderVideo(ext_state, simX_horizon, True, t, folder, "phase0")
+#renderVideo(ext_state, simX_horizon, True, t, folder, "phase0")
 
 print(stop_state)
 print(simX[-1])
@@ -491,6 +491,18 @@ plotRes(simX,t)
 plt.savefig('results/' + folder + "/state_plots.eps")
 plt.savefig('results/' + folder + "/state_plots.png", dpi=300)
 
+plotState(simX,t)
+plt.savefig('results/' + folder + "/state_plots_all.eps")
+plt.savefig('results/' + folder + "/state_plots_all.png", dpi=300)
+
+plotStateDot(simX,t)
+plt.savefig('results/' + folder + "/state_plots_dot.eps")
+plt.savefig('results/' + folder + "/state_plots_dot.png", dpi=300)
+
+plotControl(simU,t)
+plt.savefig('results/' + folder + "/control_plots_all.eps")
+plt.savefig('results/' + folder + "/control_plots_all.png", dpi=300)
+
 plotU(simU,t)
 plt.savefig('results/' + folder + "/control_plots.eps")
 plt.savefig('results/' + folder + "/control_plots.png", dpi=300)
@@ -517,12 +529,13 @@ with open('results/' + folder + "/t.npy", 'wb') as f:
     np.save(f, t)
 
 # THIS IS A BIT SLOW
-renderVideo(simX, simX_horizon, False, t, folder, "video")
+#renderVideo(simX, simX_horizon, False, t, folder, "video")
 
 indices = np.arange(0, ext_state.shape[0], 25)
 ext_state = ext_state[indices]
 t_phase0 = t_phase0[indices]
-renderVideo(np.concatenate((ext_state,simX)), simX_horizon, True, np.concatenate((t_phase0,t)), folder, "video_total")
+
+#renderVideo(np.concatenate((ext_state,simX)), simX_horizon, True, np.concatenate((t_phase0,t)), folder, "video_total")
 #with open("list.txt", 'w') as f:
 #    print(f"results/{folder}/phase0.mp4", file=f)
 #    print(f"results/{folder}/video.mp4", file=f)

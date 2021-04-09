@@ -6,3 +6,5 @@ src/python/c_generated_code/*
 src/python/results/*
 src/python/__pycache__/*
 src/python/acados_ocp.json
+
+.DS_Store

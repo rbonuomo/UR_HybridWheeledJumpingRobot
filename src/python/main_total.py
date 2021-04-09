@@ -507,6 +507,11 @@ plotU(simU,t)
 plt.savefig('results/' + folder + "/control_plots.eps")
 plt.savefig('results/' + folder + "/control_plots.png", dpi=300)
 
+#all single plots
+os.mkdir('results/' + folder + '/single_plot')
+path='results/' + folder + '/single_plot'
+single_plots(simX,simU,t,path)
+
 print(simX.shape)
 print(ext_state.shape)
 plotRes(np.concatenate((ext_state,simX)), np.concatenate((t_phase0,t)))

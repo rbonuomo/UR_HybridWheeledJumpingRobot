@@ -540,7 +540,7 @@ indices = np.arange(0, ext_state.shape[0], 25)
 ext_state = ext_state[indices]
 t_phase0 = t_phase0[indices]
 
-#renderVideo(np.concatenate((ext_state,simX)), simX_horizon, True, np.concatenate((t_phase0,t)), folder, "video_total")
+renderVideo(np.concatenate((ext_state,simX)), simX_horizon, True, np.concatenate((t_phase0,t)), folder, "video_total")
 #with open("list.txt", 'w') as f:
 #    print(f"results/{folder}/phase0.mp4", file=f)
 #    print(f"results/{folder}/video.mp4", file=f)

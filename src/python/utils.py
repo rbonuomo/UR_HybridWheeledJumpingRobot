@@ -307,11 +307,23 @@ def drawRobot(state, i, folder):
     plt.xlim((-1, 3))
     plt.ylim((-1, 3))
 
-    rect = matplotlib.patches.Rectangle((state[0]+math.cos(-state[4])*0.1, state[1]+math.sin(-state[4])*0.1), state[3], 0.2, angle=90-state[4]*180/math.pi)
+    rect = matplotlib.patches.Rectangle((state[0]+math.cos(-state[4])*0.1, state[1]+math.sin(-state[4])*0.1), state[3], 0.20, angle=90-state[4]*180/math.pi, color='darkgrey')
     plt.gca().add_patch(rect)
 
-    circle = plt.Circle((state[0], state[1]), 0.17, color='r')
+    rect1 = matplotlib.patches.Rectangle((state[0]+math.cos(-state[4])*0.11, state[1]+math.sin(-state[4])*0.11), 0.3, 0.22, angle=90-state[4]*180/math.pi,color='black')
+    plt.gca().add_patch(rect1)
+
+    circle = plt.Circle((state[0], state[1]), 0.17, color='darkred')
     plt.gca().add_patch(circle)
+
+    circle1 = plt.Circle((state[0], state[1]), 0.10, color='white')
+    plt.gca().add_patch(circle1)
+
+    circle2 = plt.Circle((state[0]+state[3]*math.sin(state[4]), state[1]+state[3]*math.cos(state[4])), 0.17, color='darkred')
+    plt.gca().add_patch(circle2)
+
+    circle3 = plt.Circle((state[0]+state[3]*math.sin(state[4]), state[1]+state[3]*math.cos(state[4])), 0.10, color='white')
+    plt.gca().add_patch(circle3)
 
     x_values = [state[0], state[0]+math.cos(-state[2]+math.pi/2)*0.17]
     y_values = [state[1], state[1]+math.sin(-state[2]+math.pi/2)*0.17]

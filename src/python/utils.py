@@ -303,8 +303,8 @@ def single_plots(simX,simU,t,path):
  
 
 def drawRobot(state, i, folder):
-    plt.figure(figsize=(10, 10))
-    plt.xlim((-1, 3))
+    plt.figure(figsize=(20, 10))
+    plt.xlim((-4, 4))
     plt.ylim((-1, 3))
 
     rect = matplotlib.patches.Rectangle((state[0]+math.cos(-state[4])*0.1, state[1]+math.sin(-state[4])*0.1), state[3], 0.20, angle=90-state[4]*180/math.pi, color='darkgrey')

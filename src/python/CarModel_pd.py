@@ -182,6 +182,21 @@ class CarModel_pd:
 
         return dX
 
+    def return_lambda(self, U, X, dX):
+
+        M = self.get_M(X)
+        C = self.get_C(X)
+        S = self.get_S()
+        G = self.get_G(X)
+        Jc = self.get_Jc()
+
+        dq = X[5:]
+        ddq = dX[0:6]
+
+        lam = np.linalg.pinv(Jc.T)@(M@ddq + C@dq + G - S.T@U)
+
+        return lam
+
     def next_state(self, U, lam, dT):
 
         t, next_X = rks4(partial(self.return_continuous_model,U,lam), 0, dT, self.X, 1)

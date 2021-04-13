@@ -50,3 +50,8 @@ c=simplify(c)
 
 
 G=jacobian(U,q)'
+
+
+%M*ddq+C+G=S'*u
+%u=[tau,f]
+%S=[1,0,-1;0, 1, 0]

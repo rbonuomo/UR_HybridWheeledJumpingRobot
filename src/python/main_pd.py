@@ -2,7 +2,7 @@ from acados_template import AcadosModel, AcadosOcp, AcadosOcpSolver, AcadosSimSo
 from casadi import SX, vertcat, sin, cos, Function
 import numpy as np
 import scipy.linalg
-from CarModel_pd_acados import CarModel_pd_acados
+from CarModel_pd import CarModel_pd
 import time
 import matplotlib.pyplot as plt
 import datetime
@@ -21,7 +21,7 @@ Rw = 0.17
 Iw = (mw*(Rw**2))
 g = 9.81
 
-car_model = CarModel_pd_acados(mb, mw, Iw, Rw, Tf/N)
+car_model = CarModel_pd(mb, mw, Iw, Rw, Tf/N)
 model = car_model.model
 
 ocp = AcadosOcp()
@@ -143,20 +143,23 @@ tcomp_max = 0
 time_iterations = np.zeros(Nsim)
 cost_integral = 0
 
-Kp_theta = 15
-Kd_theta = 2
+Kp_theta = 20
+Kd_theta = 4
 Kp_phi = 0.125
 Kd_phi = 0.2
 Kp_l = 20
 Kd_l = 20
 
+noise_std = 0.0
 # simulate
 for i in tqdm(range(Nsim)):
 
     actual_time = i* (T/Nsim)
 
-    tau = -Kp_theta*(target_position[2]-x0[2]) -Kd_theta*(target_position[5]-x0[5]) - Kp_phi*(target_position[0]-x0[0])-Kd_phi*(target_position[3]-x0[3])
-    f = mb*g*np.cos(x0[2]) + Kp_l*(target_position[1]-x0[1]) + Kd_l*(target_position[4]-x0[4])
+    x_noise = x0 + np.random.normal(0, noise_std, x0.shape)
+
+    tau = -Kp_theta*(target_position[2]-x_noise[2]) -Kd_theta*(target_position[5]-x_noise[5]) - Kp_phi*(target_position[0]-x_noise[0])-Kd_phi*(target_position[3]-x_noise[3])
+    f = mb*g*np.cos(x_noise[2]) + Kp_l*(target_position[1]-x_noise[1]) + Kd_l*(target_position[4]-x_noise[4])
 
     # update reference
     for j in range(N):
@@ -205,6 +208,7 @@ with open('results/'+folder+'/data.txt', 'a') as f:
     print(f'Kd_phi = {Kd_phi}', file=f)
     print(f'Kp_l = {Kp_l}', file=f)
     print(f'Kd_l = {Kd_l}', file=f)
+    print(f'noise_std = {noise_std}', file=f)
     
     print(f'min_time = {np.min(time_iterations)}', file=f)
     print(f'max_time = {np.max(time_iterations)}', file=f)

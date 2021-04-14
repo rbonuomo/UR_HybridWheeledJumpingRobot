@@ -12,7 +12,7 @@ from tqdm import tqdm
 
 Tf = 0.5  # prediction horizon
 N = round(Tf*500)  # number of discretization steps
-T = 1.5  # maximum simulation time[s]
+T = 1.0  # maximum simulation time[s]
 
 mb = 4
 mw = 2

@@ -2,7 +2,7 @@ from acados_template import AcadosModel
 from casadi import *
 #from casadi import SX, vertcat, sin, cos, Function
 
-class CarModel_pd_acados:
+class CarModel_pd:
 
     def __init__(self, mb, mw, Iw, Rw, dT):
         self.mb = mb

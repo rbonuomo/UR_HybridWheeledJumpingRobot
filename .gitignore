@@ -1,9 +1,11 @@
 src/matlab/build/*
 src/matlab/results/*
+src/matlab/results_pd/*
 
 src/python/env/*
 src/python/c_generated_code/*
 src/python/results/*
+src/python/results_pd/*
 src/python/__pycache__/*
 src/python/acados_ocp.json
 

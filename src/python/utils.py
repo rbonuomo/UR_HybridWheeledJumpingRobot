@@ -33,7 +33,7 @@ def plotRes(simX, t):
     plt.plot(t, simX[:,3], linewidth='2')
     plt.xlim(t[0],t[-1])
     plt.ylabel(r'$l$ $[m]$',fontsize ='16')
-    plt.xlabel(r'$t$ $[s]]$',fontsize ='16')
+    plt.xlabel(r'$t$ $[s]$',fontsize ='16')
     plt.grid(True)
 
     plt.subplot(2, 5, 5)

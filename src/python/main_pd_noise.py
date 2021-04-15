@@ -12,7 +12,7 @@ from tqdm import tqdm
 
 Tf = 2  # prediction horizon
 N = round(Tf*20)  # number of discretization steps
-T = 20.0  # maximum simulation time[s]
+T = 8.0  # maximum simulation time[s]
 
 mb = 4
 mw = 2
@@ -169,11 +169,16 @@ for noise_index, noise_std in enumerate(sigma_values):
         x0 = x0_start
         for i in range(Nsim):
 
-            x_noise = x0 + np.random.normal(0, noise_std, x0.shape)
+            x_noise = x0 + np.diag([1, 0.1, 0.2, 1, 0.1, 0.2])@np.random.normal(0, noise_std, x0.shape)
 
             tau = -Kp_theta*(target_position[2]-x_noise[2]) -Kd_theta*(target_position[5]-x_noise[5]) - Kp_phi*(target_position[0]-x_noise[0])-Kd_phi*(target_position[3]-x_noise[3])
             f = mb*g*np.cos(x_noise[2]) + Kp_l*(target_position[1]-x_noise[1]) + Kd_l*(target_position[4]-x_noise[4])
-            
+
+            if np.abs(tau)>10:
+                tau = np.sign(tau)*10
+            if np.abs(f)>200:
+                f = np.sign(f)*200
+
             # update reference
             for j in range(N):
                 acados_solver.set(j, "p", np.array([tau, f]))

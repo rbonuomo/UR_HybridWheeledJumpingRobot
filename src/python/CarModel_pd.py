@@ -14,7 +14,7 @@ class CarModel_pd:
 
 def export_car_ode_model(mb, mw, Iw, Rw):
 
-    model_name = 'car_ode'
+    model_name = 'car_ode_pd'
 
     #system parameters
     mt = mb + mw

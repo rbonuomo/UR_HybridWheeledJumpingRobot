@@ -157,7 +157,7 @@ def single_plots(simX,simU,t,path):
     plt.ylabel(r'$x$ $[m]$', fontsize ='16')
     plt.xlabel(r'$t$ $[s]$', fontsize ='16')
     plt.grid(True)
-    plt.savefig(path + "/var_x.eps")
+    plt.savefig(path + "/var_x.pdf")
     plt.savefig(path + "/var_x.png", dpi=300)  
 
     #z variable
@@ -168,7 +168,7 @@ def single_plots(simX,simU,t,path):
     plt.ylabel(r'$z$ $[m]$', fontsize ='16')
     plt.xlabel(r'$t$ $[s]$', fontsize ='16')
     plt.grid(True)
-    plt.savefig(path + "/var_z.eps")
+    plt.savefig(path + "/var_z.pdf")
     plt.savefig(path + "/var_z.png", dpi=300)  
 
     # #phi variable
@@ -179,7 +179,7 @@ def single_plots(simX,simU,t,path):
     plt.ylabel(r'$\phi$ $[rad]$', fontsize ='16')
     plt.xlabel(r'$t$ $[s]$', fontsize ='16')
     plt.grid(True)
-    plt.savefig(path + "/var_phi.eps")
+    plt.savefig(path + "/var_phi.pdf")
     plt.savefig(path + "/var_phi.png", dpi=300)  
 
     #l variable
@@ -190,7 +190,7 @@ def single_plots(simX,simU,t,path):
     plt.ylabel(r'$l$ $[m]$', fontsize ='16')
     plt.xlabel(r'$t$ $[s]$', fontsize ='16')
     plt.grid(True)
-    plt.savefig(path + "/var_l.eps")
+    plt.savefig(path + "/var_l.pdf")
     plt.savefig(path + "/var_l.png", dpi=300)  
 
     #theta variable
@@ -201,7 +201,7 @@ def single_plots(simX,simU,t,path):
     plt.ylabel(r'$\theta$ $[rad]$', fontsize ='16')
     plt.xlabel(r'$t$ $[s]$', fontsize ='16')
     plt.grid(True)
-    plt.savefig(path + "/var_theta.eps")
+    plt.savefig(path + "/var_theta.pdf")
     plt.savefig(path + "/var_theta.png", dpi=300)  
 
     #xdot variable
@@ -212,7 +212,7 @@ def single_plots(simX,simU,t,path):
     plt.ylabel(r'$\dot{x}$ $[m/s]$',fontsize ='16')
     plt.xlabel(r'$t$ $[s]$', fontsize ='16')
     plt.grid(True)
-    plt.savefig(path + "/var_xdot.eps")
+    plt.savefig(path + "/var_xdot.pdf")
     plt.savefig(path + "/var_xdot.png", dpi=300)  
 
     #zdot variable
@@ -223,7 +223,7 @@ def single_plots(simX,simU,t,path):
     plt.ylabel(r'$\dot{z}$ $[m/s]$',fontsize ='16')
     plt.xlabel(r'$t$ $[s]$',fontsize ='16')
     plt.grid(True)
-    plt.savefig(path + "/var_zdot.eps")
+    plt.savefig(path + "/var_zdot.pdf")
     plt.savefig(path + "/var_zdot.png", dpi=300)  
 
     #phidot variable
@@ -234,7 +234,7 @@ def single_plots(simX,simU,t,path):
     plt.ylabel(r'$\dot{\phi}$ $[rad/s]$',fontsize ='16')
     plt.xlabel(r'$t$ $[s]$',fontsize ='16')
     plt.grid(True)
-    plt.savefig(path + "/var_phidot.eps")
+    plt.savefig(path + "/var_phidot.pdf")
     plt.savefig(path + "/var_phidot.png", dpi=300)  
 
     #ldot variable
@@ -245,7 +245,7 @@ def single_plots(simX,simU,t,path):
     plt.ylabel(r'$\dot{l}$ $[m/s]$',fontsize ='16')
     plt.xlabel(r'$t$ $[s]$',fontsize ='16')
     plt.grid(True)
-    plt.savefig(path + "/var_ldot.eps")
+    plt.savefig(path + "/var_ldot.pdf")
     plt.savefig(path + "/var_ldot.png", dpi=300)  
 
     #thetadot variable
@@ -256,7 +256,7 @@ def single_plots(simX,simU,t,path):
     plt.ylabel(r'$\dot{\theta}$ $[rad/s]$',fontsize ='16')
     plt.xlabel(r'$t$ $[s]$',fontsize ='16')
     plt.grid(True)
-    plt.savefig(path + "/var_thetadot.eps")
+    plt.savefig(path + "/var_thetadot.pdf")
     plt.savefig(path + "/var_thetadot.png", dpi=300)  
 
     #tau variable
@@ -267,7 +267,7 @@ def single_plots(simX,simU,t,path):
     plt.ylabel(r'$\tau$ $[Nm]$',fontsize ='16')
     plt.xlabel(r'$t$ $[s]$',fontsize ='16')
     plt.grid(True)
-    plt.savefig(path + "/var_tau.eps")
+    plt.savefig(path + "/var_tau.pdf")
     plt.savefig(path + "/var_tau.png", dpi=300)  
 
     #f variable
@@ -278,7 +278,7 @@ def single_plots(simX,simU,t,path):
     plt.ylabel(r'$f$ $[N]$',fontsize ='16')
     plt.xlabel(r'$t$ $[s]$',fontsize ='16')
     plt.grid(True)
-    plt.savefig(path + "/var_f.eps")
+    plt.savefig(path + "/var_f.pdf")
     plt.savefig(path + "/var_f.png", dpi=300)  
 
     plt.figure()
@@ -288,7 +288,7 @@ def single_plots(simX,simU,t,path):
     plt.ylabel(r'$\lambda_x$ $[N]$ ',fontsize ='16')
     plt.xlabel(r'$t$ $[s]$',fontsize ='16')
     plt.grid(True)
-    plt.savefig(path + "/var_lambdax.eps")
+    plt.savefig(path + "/var_lambdax.pdf")
     plt.savefig(path + "/var_lambdax.png", dpi=300)  
 
     plt.figure()
@@ -298,7 +298,7 @@ def single_plots(simX,simU,t,path):
     plt.ylabel(r'$\lambda_z$ $[N]$',fontsize ='16')
     plt.xlabel(r'$t$ $[s]$',fontsize ='16')
     plt.grid(True)
-    plt.savefig(path + "/var_lambdaz.eps")
+    plt.savefig(path + "/var_lambdaz.pdf")
     plt.savefig(path + "/var_lambdaz.png", dpi=300)  
  
 

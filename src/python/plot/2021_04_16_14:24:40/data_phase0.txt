@@ -1,0 +1,21 @@
+# python
+Tf = 0.5
+x0 = [-11.76470588   0.          41.17647059   0.        ]
+Q = [[    0     0     0     0]
+ [    0 10000     0     0]
+ [    0     0   100     0]
+ [    0     0     0     0]]
+R = [[0.01]]
+Qe = [[    0     0     0     0]
+ [    0 10000     0     0]
+ [    0     0   100     0]
+ [    0     0     0     0]]
+qp_solver = FULL_CONDENSING_QPOASES
+nlp_solver_type = SQP_RTI
+qp_solver_iter_max = 1000
+nlp_solver_max_iter = 1000
+min_time = 0.26222944259643555
+max_time = 0.4848442077636719
+mean_time = 0.3067398700714111
+std_time = 0.021271425690299932
+cost integral = 100.00000000000112

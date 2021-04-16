@@ -23,6 +23,8 @@ plt.legend(["MPC", "PD"])
 plt.ylabel(r'Final State L2-distance to x*',fontsize ='16')
 plt.xlabel(r'Noise Strength ($\sigma$)',fontsize ='16')
 plt.grid(True)
-#plt.savefig('results/' + folder + f"/noise_plot.eps")
-#plt.savefig('results/' + folder + f"/noise_plot.png", dpi=300)
-plt.show()
+
+plt.savefig('noise_plot_mpc_vs_pd_old_gain_12sec.eps')
+plt.savefig('noise_plot_mpc_vs_pd_old_gain_12sec.png', dpi=300)
+
+#plt.show()

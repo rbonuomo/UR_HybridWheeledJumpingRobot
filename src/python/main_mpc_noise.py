@@ -13,7 +13,7 @@ from tqdm import tqdm
 
 Tf = 1.5  # prediction horizon
 N = round(Tf*20)  # number of discretization steps
-T = 8.0  # maximum simulation time[s]
+T = 12.0  # maximum simulation time[s]
 
 mb = 4
 mw = 2
@@ -38,9 +38,9 @@ ny_e = nx
 ocp.dims.N = N
 
 # set cost
-Q =  np.diag([ 1, 50, 10, 0, 0, 0])*100
-R = np.diag([1, 0.5])*5
-Qe = np.diag([ 1, 50, 10, 0, 0, 0])*100
+Q =  np.diag([ 5, 50, 0.5, 1, 50, 500])
+R = np.diag([10, 1])
+Qe = np.diag([ 5, 50, 0.5, 1, 10, 500])
 
 
 ocp.cost.cost_type = "LINEAR_LS"

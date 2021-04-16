@@ -1,0 +1,30 @@
+# python
+Tf = 2
+N = 40
+x0 = [0.         0.5        0.39269908 0.         0.         0.        ]
+target_position = [-11.76470588   0.8          0.           0.           0.
+   0.        ]
+Q = [[1 0 0 0 0 0]
+ [0 1 0 0 0 0]
+ [0 0 1 0 0 0]
+ [0 0 0 1 0 0]
+ [0 0 0 0 1 0]
+ [0 0 0 0 0 1]]
+R = []
+Qe = [[1 0 0 0 0 0]
+ [0 1 0 0 0 0]
+ [0 0 1 0 0 0]
+ [0 0 0 1 0 0]
+ [0 0 0 0 1 0]
+ [0 0 0 0 0 1]]
+qp_solver = PARTIAL_CONDENSING_HPIPM
+nlp_solver_type = SQP_RTI
+qp_solver_iter_max = 1000
+nlp_solver_max_iter = 1000
+Kp_theta = 20
+Kd_theta = 4
+Kp_phi = 0.125
+Kd_phi = 0.2
+Kp_l = 20
+Kd_l = 20
+noise_std = 0.0

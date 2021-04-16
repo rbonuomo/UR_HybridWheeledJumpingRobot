@@ -1,0 +1,30 @@
+# python
+Tf = 1.5
+N = 30
+x0 = [0.         0.5        0.39269908 0.         0.         0.        ]
+target_position = [-11.76470588   0.8          0.           0.           0.
+   0.           0.          39.24      ]
+Q = [[  5.    0.    0.    0.    0.    0. ]
+ [  0.   50.    0.    0.    0.    0. ]
+ [  0.    0.    0.5   0.    0.    0. ]
+ [  0.    0.    0.    1.    0.    0. ]
+ [  0.    0.    0.    0.   50.    0. ]
+ [  0.    0.    0.    0.    0.  500. ]]
+R = [[10  0]
+ [ 0  1]]
+Qe = [[  5.    0.    0.    0.    0.    0. ]
+ [  0.   50.    0.    0.    0.    0. ]
+ [  0.    0.    0.5   0.    0.    0. ]
+ [  0.    0.    0.    1.    0.    0. ]
+ [  0.    0.    0.    0.   10.    0. ]
+ [  0.    0.    0.    0.    0.  500. ]]
+qp_solver = FULL_CONDENSING_QPOASES
+nlp_solver_type = SQP_RTI
+qp_solver_iter_max = 1000
+nlp_solver_max_iter = 1000
+noise_std = 0.0
+min_time = 0.0
+max_time = 0.0
+mean_time = 0.0
+std_time = 0.0
+cost integral = 0

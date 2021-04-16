@@ -12,7 +12,7 @@ from tqdm import tqdm
 
 Tf = 2  # prediction horizon
 N = round(Tf*20)  # number of discretization steps
-T = 8.0  # maximum simulation time[s]
+T = 12.0  # maximum simulation time[s]
 
 mb = 4
 mw = 2
@@ -150,7 +150,7 @@ Kd_phi = 0.2
 Kp_l = 20
 Kd_l = 20
 
-max_noise = 0.2
+max_noise = 0.4
 num_exp = 20
 
 sigma_values = np.arange(0, max_noise+0.01, 0.02)

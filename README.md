@@ -3,4 +3,9 @@ In this work, we apply a Model Predictive Controller to a wheeled robot with a p
 
 We also consider a PD controller so to make a comparision between the two control modalities for the balancing phase. In particular, we test the robustness of both controllers adding sensor noise.
 
+The project is developed by:
+  - Rossella Bonuomo
+  - Marco Pennese
+  - Veronica Vulcano 
+
 ![ezgif com-video-to-gif](https://user-images.githubusercontent.com/65947525/115392508-ee701080-a1e0-11eb-8206-e442908d6806.gif)
